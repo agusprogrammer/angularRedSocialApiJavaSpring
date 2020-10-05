@@ -92,7 +92,6 @@ public class AmigosUsuController {
 		
 		Respon resp = new Respon();
 		resp.setRespuesta(mensajeOperacion);
-		resp.setRespuesta(mensajeOperacion);
 		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 		
 	}
