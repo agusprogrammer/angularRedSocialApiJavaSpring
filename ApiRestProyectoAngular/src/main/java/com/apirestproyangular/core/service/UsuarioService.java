@@ -74,8 +74,17 @@ public class UsuarioService {
 	
 	
 	public String deleteUsuario(int id) {
-		repository.deleteById(id);
-		return "Usuario removed !! " + id;
+		
+		String usuarioBorrado = "no";
+		
+		try {
+			repository.deleteById(id);
+			usuarioBorrado = "si";
+		} catch (Exception e) {
+			usuarioBorrado = "no";
+		}
+		
+		return usuarioBorrado;
 	}
 	
 	public Usuario updateUsuario (Usuario usu) {

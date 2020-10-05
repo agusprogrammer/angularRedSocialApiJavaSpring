@@ -56,7 +56,7 @@ public class Publicacion implements Serializable {
 	private LocalDateTime fechaCreacionPub;
 	
 	@Column(name = "pub_es_privada")
-	private Boolean pubEsPrivada;
+	private Integer pubEsPrivada;
 
 	public Integer getIdPublicacion() {
 		return idPublicacion;
@@ -106,11 +106,11 @@ public class Publicacion implements Serializable {
 		this.fechaCreacionPub = fechaCreacionPub;
 	}
 
-	public Boolean getPubEsPrivada() {
+	public Integer getPubEsPrivada() {
 		return pubEsPrivada;
 	}
 
-	public void setPubEsPrivada(Boolean pubEsPrivada) {
+	public void setPubEsPrivada(Integer pubEsPrivada) {
 		this.pubEsPrivada = pubEsPrivada;
 	}
 

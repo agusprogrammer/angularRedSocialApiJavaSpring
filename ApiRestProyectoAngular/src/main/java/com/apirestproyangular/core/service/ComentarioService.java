@@ -34,8 +34,19 @@ public class ComentarioService {
 	}
 	
 	public String deleteComentario(int id) {
-		repository.deleteById(id);
-		return "Comentario removed !! " + id;
+		
+		String comentarioBorrado = "no";
+		
+		try {
+			
+			repository.deleteById(id);
+			comentarioBorrado = "si";
+			
+		} catch (Exception e) {
+			comentarioBorrado = "no";
+		}
+		
+		return comentarioBorrado;
 	}
 	
 	public Comentario updateComentario (Comentario comment) {

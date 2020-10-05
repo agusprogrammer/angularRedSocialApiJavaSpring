@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,7 @@ import com.apirestproyangular.core.entity.AmigosUsu;
 import com.apirestproyangular.core.entity.AmigosUsuId;
 import com.apirestproyangular.core.entity.Usuario;
 import com.apirestproyangular.core.objects.BuscarDatosUsuario;
-import com.apirestproyangular.core.objects.Response;
+import com.apirestproyangular.core.objects.Respon;
 import com.apirestproyangular.core.service.AmigosUsuService;
 import com.apirestproyangular.core.service.UsuarioService;
 
@@ -31,31 +33,33 @@ public class AmigosUsuController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addAmigosUsus")
-	public List<AmigosUsu> addAmigosUsus(@RequestBody List<AmigosUsu> amigosUsus){
-		return service.saveAmigosUsu(amigosUsus);
+	public ResponseEntity<List<AmigosUsu>> addAmigosUsus(@RequestBody List<AmigosUsu> amigosUsus){
+		return new ResponseEntity<List<AmigosUsu>>(service.saveAmigosUsu(amigosUsus), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/amigosUsu")
-	public List<AmigosUsu> findAllAmigosUsu() {
-		return service.getAmigosUsu();
+	public ResponseEntity<List<AmigosUsu>> findAllAmigosUsu() {
+		return new ResponseEntity<List<AmigosUsu>>(service.getAmigosUsu(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/amigosUsu/{idSol}/{idReciv}")
-	public AmigosUsu findAmigosUsuById(@PathVariable Integer idSol, @PathVariable Integer idReciv) {
+	@GetMapping("/amigosUsuId/{idSol}/{idReciv}")
+	public ResponseEntity<AmigosUsu> findAmigosUsuById(@PathVariable int idSol, @PathVariable int idReciv) {
 		
 		AmigosUsuId amUsuId = new AmigosUsuId();
 		amUsuId.setIdSolicitante(idSol);
 		amUsuId.setIdReceptor(idReciv);
 		
-		return service.getAmigosUsuById(amUsuId);
+		System.out.println(idSol + "/" + idReciv);
+		
+		return new ResponseEntity<AmigosUsu>(service.getAmigosUsuById(amUsuId), HttpStatus.OK);
 	}
 	
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addAmigosUsu")
-	public Response addAmigosUsu(@RequestBody AmigosUsu amUsu) {
+	public ResponseEntity<Respon> addAmigosUsu(@RequestBody AmigosUsu amUsu) {
 		String mensajeOperacion = ""; //Si esta vacio, problema con insertar la entrada
 		
 		if(amUsu != null) {
@@ -73,40 +77,45 @@ public class AmigosUsuController {
 					mensajeOperacion = "Amigo usuario insertado";
 					
 				}else {
-					mensajeOperacion = "Problemas, Amigo usuario no insertada";
+					mensajeOperacion = "Problemas, Amigo usuario no insertado";
 				}
 				
 				
 			}catch(Exception e) {
 				System.out.println("Problemas en la inserccion" + e.toString());
-				mensajeOperacion = "Problemas, Amigo usuario no insertada";
+				mensajeOperacion = "Problemas, Amigo usuario no insertado";
 			}
 			
 		} else {
 			mensajeOperacion = "Amigo usuario vacio";
 		}
 		
-		Response resp = new Response();
+		Respon resp = new Respon();
 		resp.setRespuesta(mensajeOperacion);
 		
-		return resp;
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 		
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateAmigoUsuario")
-	public AmigosUsu updateAmigoUsuario(@RequestBody AmigosUsu amUsu) {
-		return service.updateAmigosUsu(amUsu);
+	public ResponseEntity<AmigosUsu> updateAmigoUsuario(@RequestBody AmigosUsu amUsu) {
+		return new ResponseEntity<AmigosUsu>(service.updateAmigosUsu(amUsu), HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/deleteAmigoUsuario/{idSol}/{idRecv}")
-	public String deleteAmigoUsuario(@PathVariable int idSol, @PathVariable int idRecv) {
+	public ResponseEntity<Respon> deleteAmigoUsuario(@PathVariable int idSol, @PathVariable int idRecv) {
 		
 		AmigosUsuId id = new AmigosUsuId();
 		
 		id.setIdReceptor(idRecv);
 		id.setIdSolicitante(idSol);
 		
-		return service.deleteAmigosUsu(id);
+		Respon resp = new Respon();
+		resp.setRespuesta(service.deleteAmigosUsu(id));
+		
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 	}
 	
 	//Metodos propios -------------------------------------------------------
@@ -117,13 +126,13 @@ public class AmigosUsuController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getAmigosUsu/{idUsu}")
-	public List<AmigosUsu> getAmigosUsuario(@PathVariable int idUsu){
+	public ResponseEntity<List<AmigosUsu>> getAmigosUsuario(@PathVariable int idUsu){
 		
 		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
 		
 		listaAmigosUsu = (ArrayList<AmigosUsu>) service.findAmigosUsuario(idUsu, idUsu);
 		listaAmigosUsu = quitarListasUsu(listaAmigosUsu);
-		return listaAmigosUsu;
+		return new ResponseEntity<List<AmigosUsu>>(listaAmigosUsu, HttpStatus.OK);
 		
 	}
 	
@@ -133,38 +142,61 @@ public class AmigosUsuController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPeticionesGenUsu/{idUsu}")
-	public List<AmigosUsu> getPeticionesEnGeneralUsuario(@PathVariable int idUsu){
+	public ResponseEntity<List<AmigosUsu>> getPeticionesEnGeneralUsuario(@PathVariable int idUsu){
 		
 		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
 		
 		listaAmigosUsu = (ArrayList<AmigosUsu>) service.findPeticionesEnGeneralUsuario(idUsu, idUsu);
 		listaAmigosUsu = quitarListasUsu(listaAmigosUsu);
-		return listaAmigosUsu;
+		return new ResponseEntity<List<AmigosUsu>>(listaAmigosUsu, HttpStatus.OK);
 	}
 	
 	
 	//Peticiones de amistad realizadas por el usuario
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPeticionesRealizadasUsuario/{idUsu}")
-	public List<AmigosUsu> getPeticionesRealizadasUsuario(@PathVariable int idUsu){
+	public ResponseEntity<List<AmigosUsu>> getPeticionesRealizadasUsuario(@PathVariable int idUsu){
 		
 		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
 		
 		listaAmigosUsu = (ArrayList<AmigosUsu>) service.findPeticionesRealizadasUsuario(idUsu);
 		listaAmigosUsu = quitarListasUsu(listaAmigosUsu);
-		return listaAmigosUsu;
+		return new ResponseEntity<List<AmigosUsu>>(listaAmigosUsu, HttpStatus.OK);
 	}
 	
 	//Peticiones de amistad recibidas por el usuario
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPeticionesRecibidasUsuario/{idUsu}")
-	public List<AmigosUsu> getPeticionesRecibidasUsuario(@PathVariable int idUsu){
+	public ResponseEntity<List<AmigosUsu>> getPeticionesRecibidasUsuario(@PathVariable int idUsu){
 		
 		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
 		
 		listaAmigosUsu = (ArrayList<AmigosUsu>) service.findPeticionesRecibidasUsuario(idUsu);
 		listaAmigosUsu = quitarListasUsu(listaAmigosUsu);
-		return listaAmigosUsu;
+		return new ResponseEntity<List<AmigosUsu>>(listaAmigosUsu, HttpStatus.OK);
+		
+	}
+	
+	//Buscar por los ids de usuario (metodo propio, el que esta por defecto falla)
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/getAmigosUsuPorIds/{idSol}/{usuIdRecept}")
+	public ResponseEntity<AmigosUsu> getAmigosUsuPorIds(@PathVariable int idSol, @PathVariable int usuIdRecept) {
+
+		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
+		AmigosUsu amUsu = new AmigosUsu();
+		AmigosUsu amUsuDev = new AmigosUsu();
+		
+		amUsu = service.findAmigoUsuIds(idSol, usuIdRecept);
+		listaAmigosUsu.add(amUsu);
+		
+		if (amUsu != null) {
+			listaAmigosUsu = quitarListasUsu(listaAmigosUsu);
+			amUsuDev = listaAmigosUsu.get(0);
+		}
+		
+		
+		
+		return new ResponseEntity<AmigosUsu>(amUsuDev, HttpStatus.OK);
 		
 	}
 	

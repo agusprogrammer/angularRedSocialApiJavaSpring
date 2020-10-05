@@ -25,7 +25,6 @@ public interface FotosRepository extends JpaRepository<Fotos, Integer>{
 	@Query("SELECT f FROM Fotos f "
 			+ "WHERE f.usuarioFotos.idUsu = ?1 "
 			+ "ORDER BY f.fechaSubidaFoto DESC")
-	
 	List<Fotos> findFotosUsuario(Integer idUsu);
 	
 	

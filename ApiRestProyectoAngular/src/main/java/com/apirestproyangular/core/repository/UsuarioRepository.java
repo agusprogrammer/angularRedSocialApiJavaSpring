@@ -24,20 +24,21 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 	
 	//Buscar amigos -----------------------------------------------------
 	
+	// Buscar nuevos amigos de usuario (incluyendo los que estan)
+	/*
 	@Query("SELECT u FROM Usuario u "
 			+ "WHERE u.idUsu NOT IN(SELECT us.idUsu FROM Usuario us WHERE us.idUsu = ?1) "
 			+ "ORDER BY u.fechaAlta DESC")
 	List<Usuario> findNuevosAmigos(Integer idUsu);
-	
-	
-	/*
-	@Query("SELECT u FROM Usuario u "
-			+ "WHERE u.idUsu NOT IN(SELECT us.idUsu FROM Usuario us WHERE us.idUsu = ?1) "
-			+ "AND (u.amigosUsuSolicitudes NOT IN(SELECT am FROM AmigosUsu am WHERE (am.usuAmIdSolicitante.idUsu = ?2 OR am.usuAmIdReceptor.idUsu = ?3) AND am.solicitudAceptada = 1) "
-			+ "OR u.amigosUsuRecibidos NOT IN(SELECT am FROM AmigosUsu am WHERE (am.usuAmIdSolicitante.idUsu = ?4 OR am.usuAmIdReceptor.idUsu = ?5) AND am.solicitudAceptada = 1))"
-			+ "ORDER BY u.fechaAlta DESC")
-	List<Usuario> findNuevosAmigos(Integer idUsu, Integer idUsu2, Integer idUsu3, Integer idUsu4, Integer idUsu5);
 	*/
+	
+	// Buscar nuevos amigos de usuario (Sin incluir los que estan en las peticiones,
+	// ya sean pendientes o en amigos)
+	@Query("SELECT u FROM Usuario u "
+			+ "WHERE u.idUsu NOT IN(SELECT am.idUsuAm.idReceptor FROM AmigosUsu am WHERE am.idUsuAm.idReceptor = ?1 OR am.idUsuAm.idSolicitante = ?1) "
+			+ "AND u.idUsu NOT IN(SELECT amUsu.idUsuAm.idSolicitante FROM AmigosUsu amUsu WHERE amUsu.idUsuAm.idSolicitante = ?1 OR amUsu.idUsuAm.idReceptor = ?1) "
+			+ "ORDER BY u.fechaAlta DESC")
+	List<Usuario> findNuevosAmigos(Integer idUsu);
 	
 	
 	/* select para buscar nuevos amigos por pais*/

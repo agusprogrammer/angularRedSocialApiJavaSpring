@@ -32,8 +32,19 @@ public class EntradasService {
 	}
 	
 	public String deleteEntrada(int id) {
-		repository.deleteById(id);
-		return "Entrada removed !! " + id;
+		
+		String entradaBorrada = "no";
+		
+		try {
+			
+			repository.deleteById(id);
+			entradaBorrada = "si";
+			
+		} catch(Exception e) {
+			entradaBorrada = "no";
+		}
+		
+		return entradaBorrada;
 	}
 	
 	public Entradas updateEntrada (Entradas entr) {

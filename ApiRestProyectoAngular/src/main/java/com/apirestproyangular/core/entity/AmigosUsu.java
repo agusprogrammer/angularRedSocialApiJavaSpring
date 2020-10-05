@@ -51,7 +51,7 @@ public class AmigosUsu implements Serializable {
 	// 0 no aceptada (De momento)
 	// si se borra es rechazada
 	@Column(name = "solicitud_aceptada")
-	private Boolean solicitudAceptada;
+	private Integer solicitudAceptada; // Boolean
 
 	public AmigosUsuId getIdUsuAm() {
 		return idUsuAm;
@@ -86,11 +86,11 @@ public class AmigosUsu implements Serializable {
 		this.fechaEnviada = fechaEnviada;
 	}
 
-	public Boolean getSolicitudAceptada() {
+	public Integer getSolicitudAceptada() {
 		return solicitudAceptada;
 	}
 
-	public void setSolicitudAceptada(Boolean solicitudAceptada) {
+	public void setSolicitudAceptada(Integer solicitudAceptada) {
 		this.solicitudAceptada = solicitudAceptada;
 	}
 

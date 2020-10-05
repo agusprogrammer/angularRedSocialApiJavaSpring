@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ import com.apirestproyangular.core.entity.Comentario;
 import com.apirestproyangular.core.entity.Publicacion;
 import com.apirestproyangular.core.entity.Usuario;
 import com.apirestproyangular.core.objects.BuscarDatosUsuario;
-import com.apirestproyangular.core.objects.Response;
+import com.apirestproyangular.core.objects.Respon;
 import com.apirestproyangular.core.service.ComentarioService;
 
 @RestController
@@ -30,7 +32,7 @@ public class ComentarioController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addComentario")
-	public Response addComentario(@RequestBody Comentario com) {
+	public ResponseEntity<Respon> addComentario(@RequestBody Comentario com) {
 		
 		String mensajeOperacion = "";
 		
@@ -51,54 +53,62 @@ public class ComentarioController {
 				
 				
 			}catch(Exception e) {
-				System.out.println("Problemas en la inserccion" + e.toString());
+				System.out.println("Problemas en la inserccion: ");
+				System.err.println(e.toString());
 				mensajeOperacion = "Problemas, comentario no insertado";
 			}
 		}
 		
-		Response resp = new Response();
+		Respon resp = new Respon();
 		resp.setRespuesta(mensajeOperacion);
 		
-		return resp;
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addComentarios")
-	public List<Comentario> addComentarios (@RequestBody List<Comentario> coms){
-		return service.saveComentario(coms);
+	public ResponseEntity<List<Comentario>> addComentarios (@RequestBody List<Comentario> coms){
+		return new ResponseEntity<List<Comentario>>(service.saveComentario(coms), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/comentarios")
-	public List<Comentario> findAllComentarios(){
-		return service.getComentarios();
+	public ResponseEntity<List<Comentario>> findAllComentarios(){
+		return new ResponseEntity<List<Comentario>>(service.getComentarios(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/comentarios/{id}")
-	public Comentario findComentarioById(@PathVariable int id) {
-		return service.getComentarioById(id);
+	public ResponseEntity<Comentario> findComentarioById(@PathVariable int id) {
+		return new ResponseEntity<Comentario>(service.getComentarioById(id), HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateComentario")
-	public Comentario updateComentario(@RequestBody Comentario com) {
-		return service.updateComentario(com);
+	public ResponseEntity<Comentario> updateComentario(@RequestBody Comentario com) {
+		return new ResponseEntity<Comentario>(service.updateComentario(com), HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/deleteComentario/{id}")
-	public String deleteComentario(@PathVariable int id) {
-		return service.deleteComentario(id);
+	public ResponseEntity<Respon> deleteComentario(@PathVariable int id) {
+		
+		Respon resp = new Respon();
+		resp.setRespuesta(service.deleteComentario(id));
+		
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 	}
 	
 	//Metodos propios ---------------------
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getComentariosPublicacion/{idPubl}")
-	public List<Comentario> getComentariosPublicacion(@PathVariable Integer idPubl) {
+	public ResponseEntity<List<Comentario>> getComentariosPublicacion(@PathVariable Integer idPubl) {
 		
 		ArrayList<Comentario> listaComment = new ArrayList<Comentario>();
 		listaComment = (ArrayList<Comentario>) service.findComentariosPublicacion(idPubl);
 		listaComment = quitarListas(listaComment, idPubl);
-		return listaComment;
+		return new ResponseEntity<List<Comentario>>(listaComment, HttpStatus.OK);
 		
 	}
 	
@@ -112,8 +122,8 @@ public class ComentarioController {
 			
 			Comentario com = new Comentario();
 			com = listaComentarios.get(i);
+
 			com.setUsuarioComent(busUsu.vaciarObjetosUsu(com.getUsuarioComent()));
-			
 			
 			Publicacion publ = new Publicacion();
 			publ.setIdPublicacion(idPubl);

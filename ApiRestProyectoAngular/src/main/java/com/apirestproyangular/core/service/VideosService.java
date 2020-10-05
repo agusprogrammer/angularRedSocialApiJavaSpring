@@ -32,8 +32,18 @@ public class VideosService {
 	}
 	
 	public String deleteVideo(int id) {
-		repository.deleteById(id);
-		return "Video removed !! " + id;
+		
+		String videoBorrado = "no";
+		
+		try {
+			repository.deleteById(id);
+			videoBorrado = "si";
+			
+		} catch (Exception e) {
+			videoBorrado = "no";
+		}
+		
+		return videoBorrado;
 	}
 	
 	public Videos updateVideo (Videos vid) {

@@ -32,8 +32,19 @@ public class FotosService {
 	}
 	
 	public String deleteFoto(int id) {
-		repository.deleteById(id);
-		return "foto removed !! " + id;
+		
+		String fotoBorrada = "no";
+		
+		try {
+			
+			repository.deleteById(id);
+			fotoBorrada = "si";
+			
+		} catch (Exception e) {
+			fotoBorrada = "no";
+		}
+		
+		return fotoBorrada;
 	}
 	
 	public Fotos updateFoto (Fotos foto) {

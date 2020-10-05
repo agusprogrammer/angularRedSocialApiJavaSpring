@@ -35,15 +35,25 @@ public class AmigosUsuService implements Serializable {
 	}
 
 	public String deleteAmigosUsu(AmigosUsuId id) {
-		repository.deleteById(id);
-		return "AmigosUsu removed !! " + id.toString();
+		
+		String amigoUsuBorrado = "no";
+		
+		try {
+			
+			repository.deleteById(id);
+			amigoUsuBorrado = "si";
+			
+		} catch (Exception e) {
+			amigoUsuBorrado = "no";
+		}
+		
+		return amigoUsuBorrado;
+		
 	}
 	
 	public AmigosUsu updateAmigosUsu (AmigosUsu amigosUsu) {
-		AmigosUsu existingAmigosUsu = repository.findById(amigosUsu.getIdUsuAm()).orElse(null);
-		//existingAmigosUsu.setName(amigosUsu.getName());
-		//existingAmigosUsu.setQuantity(amigosUsu.getQuantity());
-		//existingAmigosUsu.setPrice(amigosUsu.getPrice());
+		AmigosUsu existingAmigosUsu = new AmigosUsu();
+		existingAmigosUsu = repository.findAmigoUsuIds(amigosUsu.getIdUsuAm().getIdSolicitante(), amigosUsu.getIdUsuAm().getIdReceptor());
 		existingAmigosUsu.setUsuAmIdSolicitante(amigosUsu.getUsuAmIdSolicitante());
 		existingAmigosUsu.setUsuAmIdReceptor(amigosUsu.getUsuAmIdReceptor());
 		existingAmigosUsu.setSolicitudAceptada(amigosUsu.getSolicitudAceptada());
@@ -90,6 +100,15 @@ public class AmigosUsuService implements Serializable {
 		ArrayList<AmigosUsu> peticionesRecibidas = new ArrayList<AmigosUsu>();
 		peticionesRecibidas = (ArrayList<AmigosUsu>) repository.findPeticionesRecibidasUsuario(idUsuRecep);
 		return peticionesRecibidas;
+	}
+	
+	// buscarpor los ids de usuario
+	public AmigosUsu findAmigoUsuIds(Integer idUsuSolicitud, Integer idUsuRecep) {
+		
+		AmigosUsu amUsu = new AmigosUsu();
+		amUsu = repository.findAmigoUsuIds(idUsuSolicitud, idUsuRecep);
+		
+		return amUsu;
 	}
 	
 	

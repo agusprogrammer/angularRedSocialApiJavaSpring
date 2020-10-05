@@ -51,5 +51,10 @@ public interface AmigosUsuRepository extends JpaRepository <AmigosUsu, AmigosUsu
 			+ "AND am.solicitudAceptada = 0")
 	List<AmigosUsu> findPeticionesRecibidasUsuario(Integer idUsuRecep);
 	
+	/* Buscar usuarios por Ids */
+	@Query("SELECT am FROM AmigosUsu am WHERE am.usuAmIdSolicitante.idUsu = ?1 "
+			+ "AND am.usuAmIdReceptor.idUsu = ?2 ")
+	AmigosUsu findAmigoUsuIds(Integer idUsuSolicitud, Integer idUsuRecep);
+	
 	
 }

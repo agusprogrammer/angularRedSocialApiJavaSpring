@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.xml.stream.events.Comment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,7 @@ import com.apirestproyangular.core.entity.Comentario;
 import com.apirestproyangular.core.entity.Fotos;
 import com.apirestproyangular.core.entity.Publicacion;
 import com.apirestproyangular.core.objects.BuscarDatosUsuario;
-import com.apirestproyangular.core.objects.Response;
+import com.apirestproyangular.core.objects.Respon;
 import com.apirestproyangular.core.service.PublicacionService;
 
 @RestController
@@ -32,7 +34,7 @@ public class PublicacionController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addPublicacion")
-	public Response addPublicacion(@RequestBody Publicacion publ) {
+	public ResponseEntity<Respon> addPublicacion(@RequestBody Publicacion publ) {
 		String mensajeOperacion = ""; //Si esta vacio, problema con insertar la entrada
 		
 		if(publ != null) {
@@ -63,70 +65,77 @@ public class PublicacionController {
 			mensajeOperacion = "Publicacion vacia";
 		}
 		
-		Response resp = new Response();
+		Respon resp = new Respon();
 		resp.setRespuesta(mensajeOperacion);
 		
-		return resp;
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 		
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addPublicaciones")
-	public List<Publicacion> addPublicaciones (@RequestBody List<Publicacion> publicaciones){
-		return service.savePublicaciones(publicaciones);
+	public ResponseEntity<List<Publicacion>> addPublicaciones (@RequestBody List<Publicacion> publicaciones){
+		return new ResponseEntity<List<Publicacion>>(service.savePublicaciones(publicaciones), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/publicaciones")
-	public List<Publicacion> findAllPublicaciones(){
-		return service.getPublicaciones();
+	public ResponseEntity<List<Publicacion>> findAllPublicaciones(){
+		return new ResponseEntity<List<Publicacion>>(service.getPublicaciones(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/publicaciones/{id}")
-	public Publicacion findPublicacionesById(@PathVariable int id) {
-		return service.getPublicacionById(id);
+	@GetMapping("/publicacionId/{id}")
+	public ResponseEntity<Publicacion> findPublicacionesById(@PathVariable Integer id) {
+		
+		return new ResponseEntity<Publicacion>(service.getPublicacionById(id),HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updatePublicacion")
-	public Publicacion updatePublicacion(@RequestBody Publicacion publ) {
-		return service.updatePublicacion(publ);
+	public ResponseEntity<Publicacion> updatePublicacion(@RequestBody Publicacion publ) {
+		return new ResponseEntity<Publicacion>(service.updatePublicacion(publ), HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/deletePublicacion/{id}")
-	public String deletePublicacion(@PathVariable int id) {
-		return service.deletePublicacion(id);
+	public ResponseEntity<Respon> deletePublicacion(@PathVariable int id) {
+		
+		Respon resp = new Respon();
+		resp.setRespuesta(service.deletePublicacion(id));
+		return new ResponseEntity<Respon>(resp, HttpStatus.OK);
 	}
 	
 	//metodos propios ------------------------------------------------
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPubliInicioUsuario/{idUsu}")
-	public List<Publicacion> getPubliInicioUsuario(@PathVariable Integer idUsu){
+	public ResponseEntity<List<Publicacion>> getPubliInicioUsuario(@PathVariable Integer idUsu){
 		
 		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
 		listaPubl =  (ArrayList<Publicacion>) service.findPubliInicioUsuario(idUsu);
 		listaPubl = quitarListas(listaPubl);
-		return listaPubl;
+		return new ResponseEntity<List<Publicacion>>(listaPubl, HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPublicacionesUsuario/{idUsu}")
-	public List<Publicacion> getPublicacionesUsuario(@PathVariable Integer idUsu){
+	public ResponseEntity<List<Publicacion>> getPublicacionesUsuario(@PathVariable Integer idUsu){
 		
 		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
 		listaPubl =  (ArrayList<Publicacion>) service.findPublicacionesUsuario(idUsu);
 		listaPubl = quitarListas(listaPubl);
-		return listaPubl;
+		return new ResponseEntity<List<Publicacion>>(listaPubl, HttpStatus.OK);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getPubliPubl")
-	public List<Publicacion> getPubliPubl(){
+	public ResponseEntity<List<Publicacion>> getPubliPubl(){
 		
 		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
 		listaPubl = (ArrayList<Publicacion>) service.findPublicacionesPubl();
 		listaPubl = quitarListas(listaPubl);
-		return listaPubl;
+		return new ResponseEntity<List<Publicacion>>(listaPubl, HttpStatus.OK);
 	}
 	
 	//Vaciar listas

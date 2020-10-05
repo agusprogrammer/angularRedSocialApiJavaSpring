@@ -73,19 +73,19 @@ public class Usuario implements Serializable {
 	private String contrasenya;
 	
 	@Column(name = "perfil_privado")
-	private Boolean perfilPrivado;
+	private Integer perfilPrivado; //Boolean
 	
 	@Column(name = "aceptada_pol_priva")
-	private Boolean aceptadaPolPriva;
+	private Integer aceptadaPolPriva; //Boolean
 	
 	@Column(name = "es_administrador")
-	private Boolean esAdministrador;
+	private Integer esAdministrador; //Boolean
 	
 	@Column(name = "usuario_activo")
-	private Boolean usuarioActivo;
+	private Integer usuarioActivo; //Boolean
 	
 	@Column(name = "usuario_baneado")
-	private Boolean usuarioBaneado;
+	private Integer usuarioBaneado;//Boolean
 	
 	@Column(name = "fecha_fin_baneo")
 	private LocalDateTime fechaFinBaneo;
@@ -100,13 +100,13 @@ public class Usuario implements Serializable {
 	private LocalDateTime fechaUltimoLogin;
 	
 	@Column(name = "foto_perfil")
-	private Blob fotoPerfil;
-	//private String fotoPerfil;
+	//private Blob fotoPerfil;
+	private String fotoPerfil;
 	
 	
 	@Column(name = "foto_portada")
-	private Blob fotoPortada;
-	//private String fotoPortada;
+	//private Blob fotoPortada;
+	private String fotoPortada;
 	
 	//Relaciones
 	// mappedBy = "usuarioComent",
@@ -271,43 +271,43 @@ public class Usuario implements Serializable {
 		this.contrasenya = contrasenya;
 	}
 
-	public Boolean getPerfilPrivado() {
+	public Integer getPerfilPrivado() {
 		return perfilPrivado;
 	}
 
-	public void setPerfilPrivado(Boolean perfilPrivado) {
+	public void setPerfilPrivado(Integer perfilPrivado) {
 		this.perfilPrivado = perfilPrivado;
 	}
 
-	public Boolean getAceptadaPolPriva() {
+	public Integer getAceptadaPolPriva() {
 		return aceptadaPolPriva;
 	}
 
-	public void setAceptadaPolPriva(Boolean aceptadaPolPriva) {
+	public void setAceptadaPolPriva(Integer aceptadaPolPriva) {
 		this.aceptadaPolPriva = aceptadaPolPriva;
 	}
 
-	public Boolean getEsAdministrador() {
+	public Integer getEsAdministrador() {
 		return esAdministrador;
 	}
 
-	public void setEsAdministrador(Boolean esAdministrador) {
+	public void setEsAdministrador(Integer esAdministrador) {
 		this.esAdministrador = esAdministrador;
 	}
 
-	public Boolean getUsuarioActivo() {
+	public Integer getUsuarioActivo() {
 		return usuarioActivo;
 	}
 
-	public void setUsuarioActivo(Boolean usuarioActivo) {
+	public void setUsuarioActivo(Integer usuarioActivo) {
 		this.usuarioActivo = usuarioActivo;
 	}
 
-	public Boolean getUsuarioBaneado() {
+	public Integer getUsuarioBaneado() {
 		return usuarioBaneado;
 	}
 
-	public void setUsuarioBaneado(Boolean usuarioBaneado) {
+	public void setUsuarioBaneado(Integer usuarioBaneado) {
 		this.usuarioBaneado = usuarioBaneado;
 	}
 
@@ -343,19 +343,19 @@ public class Usuario implements Serializable {
 		this.fechaUltimoLogin = fechaUltimoLogin;
 	}
 
-	public Blob getFotoPerfil() {
+	public String getFotoPerfil() {
 		return fotoPerfil;
 	}
 
-	public void setFotoPerfil(Blob fotoPerfil) {
+	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	public Blob getFotoPortada() {
+	public String getFotoPortada() {
 		return fotoPortada;
 	}
 
-	public void setFotoPortada(Blob fotoPortada) {
+	public void setFotoPortada(String fotoPortada) {
 		this.fotoPortada = fotoPortada;
 	}
 

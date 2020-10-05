@@ -33,8 +33,19 @@ public class PublicacionService {
 	}
 	
 	public String deletePublicacion(int id) {
-		repository.deleteById(id);
-		return "Publicacion removed !! " + id;
+		
+		String publicacionBorrada = "no";
+		
+		try {
+			
+			repository.deleteById(id);
+			publicacionBorrada = "si";
+			
+		} catch (Exception e) {
+			publicacionBorrada = "no";
+		}
+		
+		return publicacionBorrada;
 	}
 	
 	public Publicacion updatePublicacion(Publicacion publicacion) {
