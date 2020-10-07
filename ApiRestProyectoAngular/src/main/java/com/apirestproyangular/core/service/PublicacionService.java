@@ -61,6 +61,7 @@ public class PublicacionService {
 	// metodos propios -------------------------------------------------------
 	
 	/*Publicaciones para el inicio de un usuario (amigos del usuario)*/
+	/*
 	public List<Publicacion> findPubliInicioUsuario(Integer idUsu) {
 		
 		ArrayList<Publicacion> publInicio = new ArrayList<>();
@@ -68,6 +69,7 @@ public class PublicacionService {
 		return publInicio;
 		
 	}
+	*/
 	
 	/*Publicaciones publicas para la seccion de explorar*/
 	public List<Publicacion> findPublicacionesPubl() {

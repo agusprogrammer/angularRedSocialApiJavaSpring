@@ -1,5 +1,6 @@
 package com.apirestproyangular.core.controller;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -137,10 +138,15 @@ public class PublicacionController {
 		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
 		// Buscar las publicaciones de los amigos del usuario
 		for (Usuario amigoUsuario: soloAmigos) {
-			Publicacion publUsu = new Publicacion();
-			publUsu = service.getPublicacionById(amigoUsuario.getIdUsu());
-			listaPubl.add(publUsu);
+			
+			System.out.println(amigoUsuario.getIdUsu());
+			
+			listaPubl = (ArrayList<Publicacion>) service.findPublicacionesUsuario(amigoUsuario.getIdUsu());
+			// publUsu = service.getPublicacionById(amigoUsuario.getIdUsu());
+
 		}
+		
+		listaPubl = quitarListas(listaPubl);
 		
 		// Como estaba antes
 		/*
