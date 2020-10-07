@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apirestproyangular.core.entity.AmigosUsu;
 import com.apirestproyangular.core.entity.Comentario;
 import com.apirestproyangular.core.entity.Fotos;
 import com.apirestproyangular.core.entity.Publicacion;
+import com.apirestproyangular.core.entity.Usuario;
 import com.apirestproyangular.core.objects.BuscarDatosUsuario;
 import com.apirestproyangular.core.objects.Respon;
+import com.apirestproyangular.core.service.AmigosUsuService;
 import com.apirestproyangular.core.service.PublicacionService;
 
 @RestController
@@ -31,6 +34,8 @@ public class PublicacionController {
 	
 	@Autowired
 	private PublicacionService service;
+	@Autowired
+	private AmigosUsuService amUsuServ;
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addPublicacion")
@@ -112,9 +117,37 @@ public class PublicacionController {
 	@GetMapping("/getPubliInicioUsuario/{idUsu}")
 	public ResponseEntity<List<Publicacion>> getPubliInicioUsuario(@PathVariable Integer idUsu){
 		
+		// buscar amigos del usuario
+		ArrayList<AmigosUsu> listaAmigosUsu = new ArrayList<AmigosUsu>();
+		listaAmigosUsu = (ArrayList<AmigosUsu>) amUsuServ.findAmigosUsuario(idUsu, idUsu);
+		
+		// Recorrer para seleccionar
+		ArrayList<Usuario> soloAmigos = new ArrayList<Usuario>();
+		for (AmigosUsu amUsu: listaAmigosUsu) {
+			
+			if(amUsu.getUsuAmIdReceptor().getIdUsu() != idUsu) {
+				soloAmigos.add(amUsu.getUsuAmIdReceptor());
+			}
+			
+			if(amUsu.getUsuAmIdSolicitante().getIdUsu() != idUsu) {
+				soloAmigos.add(amUsu.getUsuAmIdSolicitante());
+			}
+		}
+		
+		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
+		// Buscar las publicaciones de los amigos del usuario
+		for (Usuario amigoUsuario: soloAmigos) {
+			Publicacion publUsu = new Publicacion();
+			publUsu = service.getPublicacionById(amigoUsuario.getIdUsu());
+			listaPubl.add(publUsu);
+		}
+		
+		// Como estaba antes
+		/*
 		ArrayList<Publicacion> listaPubl = new ArrayList<Publicacion>();
 		listaPubl =  (ArrayList<Publicacion>) service.findPubliInicioUsuario(idUsu);
 		listaPubl = quitarListas(listaPubl);
+		*/
 		return new ResponseEntity<List<Publicacion>>(listaPubl, HttpStatus.OK);
 	}
 	
